@@ -1,0 +1,305 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local1="clr-namespace:WpfApp1.ViewModel" x:Class="WpfApp1.MainWindow"
+        mc:Ignorable="d"
+        Title="Calculator" Height="532" Width="696" Closing="Window_Closing">
+    <!--Button Design-->
+    <Window.Resources>
+        <ResourceDictionary>
+            <LinearGradientBrush x:Key="ButtonBackground" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFD9EDFF" Offset="0"/>
+                <GradientStop Color="#FFC0DEFF" Offset="0.445"/>
+                <GradientStop Color="#FFAFD1F8" Offset="0.53"/>
+            </LinearGradientBrush>
+            <Style x:Key="SimpleButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Border Background="{StaticResource ButtonBackground}" VerticalAlignment="Stretch" CornerRadius="2" HorizontalAlignment="Stretch"/>
+                                <Border x:Name="BorderPressed"  Opacity="0" Background="Blue" VerticalAlignment="Stretch" CornerRadius="2" HorizontalAlignment="Stretch"/>
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="MainContent" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="BorderPressed" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="BorderPressed" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <!--End Button Design-->
+
+    <!--View Model-->
+    <Window.DataContext>
+        <local1:CalculatorViewModel/>
+    </Window.DataContext>
+    <!--End View Model-->
+
+    <!--Keyboard Button Bindings-->
+    <Window.InputBindings>
+        <!--Numbers-->
+        <KeyBinding Key="NumPad1" Command="{Binding NumberOne}"/>
+        <KeyBinding Key="D1" Command="{Binding NumberOne}"/>
+        <KeyBinding Key="NumPad2" Command="{Binding NumberTwo}"/>
+        <KeyBinding Key="D2" Command="{Binding NumberTwo}"/>
+        <KeyBinding Key="NumPad3" Command="{Binding NumberThree}"/>
+        <KeyBinding Key="D3" Command="{Binding NumberThree}"/>
+        <KeyBinding Key="NumPad4" Command="{Binding NumberFour}"/>
+        <KeyBinding Key="D4" Command="{Binding NumberFour}"/>
+        <KeyBinding Key="NumPad5" Command="{Binding NumberFive}"/>
+        <KeyBinding Key="D5" Command="{Binding NumberFive}"/>
+        <KeyBinding Key="NumPad6" Command="{Binding NumberSix}"/>
+        <KeyBinding Key="D6" Command="{Binding NumberSix}"/>
+        <KeyBinding Key="NumPad7" Command="{Binding NumberSeven}"/>
+        <KeyBinding Key="D7" Command="{Binding NumberSeven}"/>
+        <KeyBinding Key="NumPad8" Command="{Binding NumberEigth}"/>
+        <KeyBinding Key="D8" Command="{Binding NumberEigth}"/>
+        <KeyBinding Key="NumPad9" Command="{Binding NumberNine}"/>
+        <KeyBinding Key="D9" Command="{Binding NumberNine}"/>
+        <KeyBinding Key="NumPad0" Command="{Binding NumberZero}"/>
+        <KeyBinding Key="D0" Command="{Binding NumberZero}"/>
+        <!--End Number-->
+
+        <!--Operator-->
+        <KeyBinding Key="Decimal" Command="{Binding cmdPoint}"></KeyBinding>
+        <KeyBinding Key="Add" Command="{Binding cmdAdd}"></KeyBinding>
+        <KeyBinding Key="Subtract" Command="{Binding cmdSubtract}"></KeyBinding>
+        <KeyBinding Key="Multiply" Command="{Binding cmdMultiply}"></KeyBinding>
+        <KeyBinding Key="Divide" Command="{Binding cmdDivide}"></KeyBinding>
+        <KeyBinding Key="Esc" Command="{Binding ClickClearEntry}"></KeyBinding>
+        <KeyBinding Gesture="Enter" Command="{Binding cmdEqual}"></KeyBinding>
+        <!--End Operator-->
+
+        <!--Shortcuts-->
+        <KeyBinding Gesture="Ctrl+c" Command="{Binding cmdCopy}"></KeyBinding>
+        <KeyBinding Gesture="Ctrl+V" Command="{Binding cmdPaste}"></KeyBinding>
+        <!--End Shortcuts-->
+
+    </Window.InputBindings>
+    <!--End Keyboard Button Bindings-->
+
+    <Grid>
+        <!--Form Design-->
+        <Grid.Background >
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#2980b9" Offset="1"/>
+                <GradientStop Color="#6dd5fa" Offset="0.445"/>
+                <GradientStop Color="#FFFFFF" Offset="0.53"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <!--End Form Design-->
+
+        <!--Main Text-->
+        <TextBox x:Name="txtCalculator" Text="{Binding Display}" IsEnabled="False" 
+                 HorizontalAlignment="Left" Height="111" Margin="10,24,0,0" 
+                 VerticalAlignment="Top" Width="345" TextAlignment="Right" 
+                 VerticalContentAlignment="Bottom" FontSize="30" FontFamily="Tahoma" TextWrapping="Wrap"/>
+        <!--End Main Text-->
+
+        <!--Memory Functions-->
+        <Button x:Name="cmdMClear"  Content="MC" Command="{Binding cmdMemoryClear}"
+                HorizontalAlignment="Left" Height="54"
+                Margin="10,140,0,0" VerticalAlignment="Top" Width="65" 
+                Style="{StaticResource SimpleButtonStyle}" RenderTransformOrigin="0.332,0.33" 
+                ToolTip="Memory Clear"/>
+
+        <Button x:Name="cmdMRecall"  Content="MR" Command="{Binding cmdRecall}"
+                HorizontalAlignment="Left" Height="54" 
+                Margin="80,140,0,0" VerticalAlignment="Top" Width="65"
+                Style="{StaticResource SimpleButtonStyle}" RenderTransformOrigin="0.332,0.33"
+                ToolTip="Memory Recall"/>
+
+        <Button x:Name="cmdMStore"  Content="MS" Command="{Binding cmdStore}" 
+                HorizontalAlignment="Left" Height="54"
+                Margin="150,140,0,0" VerticalAlignment="Top" Width="65" 
+                Style="{StaticResource SimpleButtonStyle}" RenderTransformOrigin="0.332,0.33" 
+                ToolTip="Memory Store"/>
+
+        <Button  x:Name="cmdMAdd" Content="M+" Command="{Binding cmdMemoryAdd}"
+                 HorizontalAlignment="Left" Height="54"
+                 Margin="220,140,0,0" VerticalAlignment="Top" Width="65" 
+                 Style="{StaticResource SimpleButtonStyle}" RenderTransformOrigin="0.332,0.33"
+                 ToolTip="Memory Add"/>
+        <Button  x:Name="cmdMSubtract" Content="M-" Command="{Binding cmdMemoryMinus}"
+                 HorizontalAlignment="Left" Height="54"
+                 Margin="290,140,0,0" VerticalAlignment="Top" Width="65" 
+                 Style="{StaticResource SimpleButtonStyle}" RenderTransformOrigin="0.332,0.33" 
+                 ToolTip="Memory Subtract"/>
+        <!--End Memory Functions-->
+
+        <Button  x:Name="cmdLeft" Content="←" HorizontalAlignment="Left" Height="54" Margin="10,199,0,0" VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" RenderTransformOrigin="0.332,0.33" FontSize="15" FontWeight="ExtraBold" />
+
+        <!--Clear Commands-->
+        <Button  x:Name="cmdClearEntry" Command="{Binding cmdClear}" 
+                 Content="CE" HorizontalAlignment="Left" Height="54" 
+                 Margin="80,199,0,0" VerticalAlignment="Top" Width="65" 
+                 Style="{StaticResource SimpleButtonStyle}" RenderTransformOrigin="0.332,0.33"
+                 ToolTip="Clear Entry"/>
+
+        <Button x:Name="cmdClear" Command="{Binding ClickClearEntry}"
+                Content="C" HorizontalAlignment="Left" Height="54"
+                Margin="150,199,0,0" VerticalAlignment="Top" Width="65"
+                Style="{StaticResource SimpleButtonStyle}" 
+                RenderTransformOrigin="0.332,0.33" ToolTip="Clear"/>
+        <!--End Clear Commands-->
+
+        <Button x:Name="cmdSqrRoot" Content="√"
+                Command="{Binding cmdSqrRt}"
+                HorizontalAlignment="Left" Height="54" 
+                Margin="290,199,0,0" VerticalAlignment="Top" 
+                Width="65" Style="{StaticResource SimpleButtonStyle}" 
+                RenderTransformOrigin="0.332,0.33" FontSize="15" 
+                FontWeight="ExtraBold" ToolTip="Square Root"/>
+
+        <Button x:Name="cmdPercent" Content="%"  Command="{Binding cmdPercentage}"
+                HorizontalAlignment="Left" Height="54" Margin="290,258,0,0"
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}"
+                RenderTransformOrigin="0.332,0.33" ToolTip="Percent"/>
+
+        <Button x:Name="cmdKeyInverse" Content="1/𝑥" HorizontalAlignment="Left" Height="54" Margin="290,317,0,0" VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" RenderTransformOrigin="0.332,0.33" ToolTip="Multiplicative Inverse"/>
+
+        <!--Negate-->
+        <Button x:Name="cmdNegate" Content="±" HorizontalAlignment="Left" 
+                Height="54" Margin="220,199,0,0" VerticalAlignment="Top" Width="65"
+                Style="{StaticResource SimpleButtonStyle}" RenderTransformOrigin="0.332,0.33" FontSize="15"
+                FontWeight="ExtraBold" ToolTip="Negate"
+                Command="{Binding cmdNegate}"/>
+        <!--End Negate-->
+
+        <!--Operator Buttons-->
+        <Button x:Name="cmdKeyEqual" Content="=" Command="{Binding cmdEqual}"
+                HorizontalAlignment="Left" Height="113" Margin="290,376,0,0"
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" 
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeyAdd" Command="{Binding cmdAdd}" Content="+"
+                HorizontalAlignment="Left" Height="54" Margin="220,435,0,0" 
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}"
+                RenderTransformOrigin="0.332,0.33">
+
+        </Button>
+
+        <Button x:Name="cmdKeyPoint" Content="." Command="{Binding cmdPoint}"
+                HorizontalAlignment="Left" Height="54" Margin="150,435,0,0" 
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" 
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeySubtract" Content="-" Command="{Binding cmdSubtract}"
+                HorizontalAlignment="Left" Height="54" Margin="220,376,0,0" 
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}"
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeyMultiply" Command="{Binding cmdMultiply}" Content="*" 
+                HorizontalAlignment="Left" Height="54" Margin="220,317,0,0" 
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" 
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeyDivide" Command="{Binding cmdDivide}" Content="/"
+                HorizontalAlignment="Left" Height="54" Margin="220,258,0,0"
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" 
+                RenderTransformOrigin="0.332,0.33"/>
+        <!--End ofOperator Buttons-->
+
+        <!--Number Buttons-->
+        <Button x:Name="cmdKeyZero" Command="{Binding NumberZero}"  Content="0" 
+                HorizontalAlignment="Left" Height="54" Margin="10,435,0,0"
+                VerticalAlignment="Top" Width="135" Style="{StaticResource SimpleButtonStyle}"
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeyOne" Content="1" Command="{Binding NumberOne}"
+                HorizontalAlignment="Left" Height="54" Margin="10,376,0,0" 
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" 
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeyTwo" Content="2" Command="{Binding NumberTwo}" 
+                HorizontalAlignment="Left" Height="54" Margin="80,376,0,0"
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" 
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeyThree" Command="{Binding NumberThree}" Content="3" 
+                HorizontalAlignment="Left" Height="54" Margin="150,376,0,0" 
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}"
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeyFour" Command="{Binding NumberFour}" Content="4"
+                HorizontalAlignment="Left" Height="54" Margin="10,317,0,0"
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}"
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeyFive" Command="{Binding NumberFive}" Content="5" 
+                HorizontalAlignment="Left" Height="54" Margin="80,317,0,0" 
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}"
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeySix" Command="{Binding NumberSix}" Content="6" 
+                HorizontalAlignment="Left" Height="54" Margin="150,317,0,0" 
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}"
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button x:Name="cmdKeySeven" Command="{Binding NumberSeven}" Content="7" 
+                HorizontalAlignment="Left" Height="54" Margin="10,258,0,0"
+                VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" 
+                RenderTransformOrigin="0.332,0.33"/>
+
+        <Button  x:Name="cmdKeyEigth" Command="{Binding NumberEigth}" Content="8" 
+                 HorizontalAlignment="Left" Height="54" Margin="80,258,0,0" 
+                 VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}"
+                 RenderTransformOrigin="0.332,0.33"/>
+
+        <Button  x:Name="cmdKeyNine" Command="{Binding NumberNine}" Content="9" 
+                 HorizontalAlignment="Left" Height="54" Margin="150,258,0,0"
+                 VerticalAlignment="Top" Width="65" Style="{StaticResource SimpleButtonStyle}" 
+                 RenderTransformOrigin="0.332,0.33"/>
+        <!--End Number Buttons-->
+
+        <!--Menu Bar-->
+        <Menu x:Name="MenuStrip" HorizontalAlignment="Left" Height="19" VerticalAlignment="Top" Width="679" IsMainMenu="True">
+            <MenuItem x:Name="mnuView" Header="_File">
+                <MenuItem Header="_Clear" Command="{Binding ClickClearEntry}"/>
+                <MenuItem x:Name="cmdExit" Header="_Exit"  Click="cmdExit_Click"  />
+            </MenuItem>
+            <MenuItem x:Name="mnuEdit" Header="_Edit">
+                <MenuItem Header="_Copy" Command="{Binding cmdCopy}"/>
+                <MenuItem Header="_Paste" Command="{Binding cmdPaste}"/>
+            </MenuItem>
+            <MenuItem  x:Name="mnuHelp" Header="_History">
+                <MenuItem Header="_Export to Text" Command="{Binding cmdExport}"/>
+                <MenuItem Header="_Import from Text" Command="{Binding cmdImport}"/>
+                <MenuItem x:Name="showHistory" Header="Show _History" Command="{Binding}" Click="ShowHistory_Click"/>
+                <MenuItem x:Name="showMemory" Header="_Show Memory" Command="{Binding}" Click="ShowMemory_Click"/>
+            </MenuItem>
+        </Menu>
+        <!--End of Menu Bar-->
+        <ListBox x:Name="lvMemory" ItemsSource="{Binding MemoryTrails}"  HorizontalAlignment="Left" Height="428" Margin="381,61,0,0" VerticalAlignment="Top" Width="288"/>
+        <ListView x:Name="lvHistory" ItemsSource="{Binding History}" Visibility="Hidden"  HorizontalAlignment="Left" Height="426" Margin="382,62,0,0" VerticalAlignment="Top" Width="285">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="History ID" Width="80" DisplayMemberBinding="{Binding HistoryID}"/>
+                    <GridViewColumn Header="History Action" Width="100" DisplayMemberBinding="{Binding HistoryAction}"/>
+                    <GridViewColumn Header="History Value" Width="100" DisplayMemberBinding="{Binding HistoryValue}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label x:Name="lblData" Content="{Binding Date}" HorizontalAlignment="Left" Height="34" Margin="383,25,0,0" VerticalAlignment="Top" Width="285" FontSize="17"/>
+    </Grid>
+</Window>

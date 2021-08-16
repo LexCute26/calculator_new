@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<History>
+  <History HistoryID="1" HistoryAction="Divide" HistoryValue="36" />
+  <History HistoryID="2" HistoryAction="Divide" HistoryValue="6" />
+  <History HistoryID="3" HistoryAction="Equal" HistoryValue="6" />
+  <History HistoryID="4" HistoryAction="Clear" HistoryValue="0" />
+  <History HistoryID="5" HistoryAction="Divide" HistoryValue="336" />
+  <History HistoryID="6" HistoryAction="Divide" HistoryValue="36" />
+  <History HistoryID="7" HistoryAction="Equal" HistoryValue="9.33333333333333" />
+  <History HistoryID="8" HistoryAction="Clear" HistoryValue="0" />
+  <History HistoryID="9" HistoryAction="Divide" HistoryValue="25" />
+  <History HistoryID="10" HistoryAction="Divide" HistoryValue="9" />
+  <History HistoryID="11" HistoryAction="Equal" HistoryValue="2.77777777777778" />
+  <History HistoryID="12" HistoryAction="Clear" HistoryValue="0" />
+  <History HistoryID="13" HistoryAction="Multiply" HistoryValue="30" />
+  <History HistoryID="14" HistoryAction="Multiply" HistoryValue="30" />
+  <History HistoryID="15" HistoryAction="Equal" HistoryValue="900" />
+  <History HistoryID="16" HistoryAction="Clear" HistoryValue="0" />
+  <History HistoryID="17" HistoryAction="Clear" HistoryValue="0" />
+  <History HistoryID="18" HistoryAction="Clear" HistoryValue="0" />
+  <History HistoryID="19" HistoryAction="Clear" HistoryValue="0" />
+</History>
